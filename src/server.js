@@ -14,7 +14,9 @@ app.use(express.json());
 const connectionString = process.env.DATABASE_URL;
 const pool = new Pool({
   connectionString,
-  ssl: connectionString ? { rejectUnauthorized: false } : undefined,
+  ssl: connectionString
+    ? { require: true, rejectUnauthorized: false }
+    : undefined,
 });
 
 // Ensure table exists on startup (compatible with spec)
@@ -94,12 +96,10 @@ app.post("/recipes", async (req, res) => {
      RETURNING *`,
     [title, making_time, serves, ingredients, cost]
   );
-  res
-    .status(200)
-    .json({
-      message: "Recipe successfully created!",
-      recipe: [toRecipeRow(rows[0])],
-    });
+  res.status(200).json({
+    message: "Recipe successfully created!",
+    recipe: [toRecipeRow(rows[0])],
+  });
 });
 
 // GET /recipes - list all recipes
@@ -152,12 +152,10 @@ app.patch("/recipes/:id", async (req, res) => {
      RETURNING *`,
     [title, making_time, serves, ingredients, cost, id]
   );
-  res
-    .status(200)
-    .json({
-      message: "Recipe successfully updated!",
-      recipe: [toRecipeRow(updatedRows[0])],
-    });
+  res.status(200).json({
+    message: "Recipe successfully updated!",
+    recipe: [toRecipeRow(updatedRows[0])],
+  });
 });
 
 // DELETE /recipes/:id - delete
