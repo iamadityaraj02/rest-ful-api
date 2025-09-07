@@ -14,9 +14,9 @@ app.use(express.json());
 const connectionString = process.env.DATABASE_URL;
 const pool = new Pool({
   connectionString,
-  ssl: connectionString
-    ? { require: true, rejectUnauthorized: false }
-    : undefined,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 // Ensure table exists on startup (compatible with spec)
